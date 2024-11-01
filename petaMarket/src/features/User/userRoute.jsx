@@ -1,10 +1,11 @@
 import { Routes,Route} from "react-router-dom";
 import Register from "./pages/register";
-import User from "./pages/User"
+import Login from "./pages/login";
 const userRoute=(
     <>
-        <Routes path="user" element={<User />}>
+        <Routes path="user" >
             <Route path='register' element={<Register />} />
+            <Route path='login' element={<Login />} />
         </Routes>
     </>
 )
