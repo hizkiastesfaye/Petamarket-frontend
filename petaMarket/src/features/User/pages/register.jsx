@@ -1,136 +1,172 @@
-import { useState } from 'react';
+import { useState } from "react"
 
-function Register(
-
-) {
-  const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
-    email: '',
-    country: '',
-    phone: '',
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const validateForm = () => {
-    let formErrors = {};
-    
-    if (!formData.firstname.trim()) {
-      formErrors.firstname = 'First name is required';
+export default function Register(){
+    const [error,setError] = useState({})
+    const [formData, setFormData] = useState({
+        firstname:'',
+        lastname:'',
+        country:'',
+        tel:'',
+        email:'',
+        password:'',
+        confirmPassword:'',
+        role:'',
+    })
+    const ValidateError = ()=>{
+        let formError = {}
+        if (!formData.firstname.trim()){
+            formError.firstname = "firstname is needed"
+        }
+        if(!formData.lastname.trim()){
+            formError.lastname = 'lastname is required'
+        }
+        if(!formData.country.trim()){
+            formError.country = 'country is required'
+        }
+        if(!formData.tel.trim()){
+            formError.tel='tel is required'
+        }
+        else if (!/^\d+$/.test(formData.phone)) {
+            formError.phone = 'Phone number must contain only digits';
+        }
+        if(!formData.email.trim()){
+            formError.email='email is required'
+        }
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            formError.email = 'Email is invalid';
+        }
+        if (!formData.role){
+            formError.role='role is required'
+        }
+        if (!formData.password){
+            formError.password='password is required'
+        }
+        else if(formData.password.length <8){
+            formError.password='password should be at least 8 characters'
+        }
+        if (!formData.confirmPassword){
+            formError.confirmPassword='confirm password is required'
+        }
+        else if(formData.password !== formData.confirmPassword){
+            formError.confirmPassword = 'confirm password is not match with password'
+        }
+        setError(formError)
+        return Object.keys((formError).length ===0)
     }
-    if (!formData.lastname.trim()) {
-      formErrors.lastname = 'Last name is required';
-    }
-    if (!formData.email) {
-      formErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      formErrors.email = 'Email is invalid';
-    }
-    if (!formData.country.trim()) {
-      formErrors.country = 'Country is required';
-    }
-    if (!formData.phone.trim()) {
-      formErrors.phone = 'Phone number is required';
-    } else if (!/^\d+$/.test(formData.phone)) {
-      formErrors.phone = 'Phone number must contain only digits';
+
+    const handleChange=(e)=>{
+        e.preventDefault();
+        const {name,value} = e.target;
+        setFormData({...formData,[name]:value})
+        console.log(formData)
     }
 
-    setErrors(formErrors);
-    return Object.keys(formErrors).length === 0;
-  };
+    return<>
+        <form className="max-w-2xl mx-auto my-20 rounded bg-white shadow-md">
+            <div className= "flex justify-center pb-5">
+                <h1 className="text-2xl font-extrabold text-gray-700 pt-10">SignUp</h1>
+            </div>
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
-      // Reset form
-      setFormData({
-        firstname: '',
-        lastname: '',
-        email: '',
-        country: '',
-        phone: '',
-      });
-      setErrors({});
-    }
-  };
+            <div className="mb-4 px-4 pt-3 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Full Name: </label>
+                    <div className="flex justify-around w-3/4 gap-2">
+                        <input 
+                            type="text" 
+                            name="firstname" 
+                            placeholder="Your first name"
+                            value={formData.firstname}
+                            onChange={handleChange}
+                            className=" w-2/3 px-4 py-1 border rounded focus:outline-none focus:border-blue-500 mr"
+                        />
+                        <input 
+                            type="text" 
+                            name="lastname"  
+                            placeholder="Your last name"
+                            value={formData.lastname}
+                            onChange={handleChange}
+                            className="w-2/3 px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
+                        /> 
+                    </div>
 
-  return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-8 bg-white shadow-md rounded">
-      <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">First Name:</label>
-        <input
-          type="text"
-          name="firstname"
-          value={formData.firstname}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-        {errors.firstname && <p className="text-red-500 text-sm">{errors.firstname}</p>}
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Last Name:</label>
-        <input
-          type="text"
-          name="lastname"
-          value={formData.lastname}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-        {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname}</p>}
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Country:</label>
-        <input
-          type="text"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-        {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-gray-700 font-semibold mb-2">Phone Number:</label>
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-        />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-      </div>
-
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors">
-        Register
-      </button>
-    </form>
-  );
+            </div>
+            <div className="mb-4 px-4 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Country</label>
+                <input 
+                    type="text" 
+                    name="country"
+                    placeholder="Enter your country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className="w-3/4 px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
+                
+                />
+            </div>
+            <div className=" mb-4 px-4 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">tel</label>
+                <input 
+                    type="text" 
+                    name='tel' 
+                    placeholder="Enter your phone number"
+                    value={formData.tel}
+                    onChange={handleChange}
+                    className="w-3/4 px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
+                />
+            </div>
+            <div className=" mb-4 px-4 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Email</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-3/4 px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
+                    /> 
+            </div>
+            <div className="mb-4 px-4 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Role: </label>
+                <div className="w-3/4 px-4 py-1 flex justify-around items-start">
+                    <div>
+                        <input 
+                                type="radio" 
+                                id="buy"
+                                name="roleradio"
+                                value={formData.role}
+                                />
+                        <label htmlFor="buy" className="text-sm">Buyer</label>
+                    </div>
+                    <div>
+                        <input 
+                                type="radio" 
+                                id="sell"
+                                name="roleradio"
+                                value={formData.role}
+                                onChange={handleChange}
+                                />
+                        <label htmlFor="sell" className="text-sm">Seller</label>
+                    </div>
+                </div>
+            </div>
+            <div className="mb-4 px-4 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Password:</label>
+                <input 
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter password with min 8 chars"
+                    className="w-3/4 px-4 py-1 border rounded focus:outline-none focus:border-blue-500" /> 
+            </div>
+            <div className="mb-4 px-4 pb-10 flex justify-between items-center">
+                <label className="text-sm font-semibold text-gray-500">Confirm Password:</label>
+                <input 
+                    type="password"
+                    name="password"
+                    placeholder="confirm password"
+                    className="w-3/4 px-4 py-1 border rounded focus:outline-none focus:border-blue-500" /> 
+            </div>
+            <button type="submit" className="w-1/2 mx-auto flex justify-center  py-2 text-white rounded bg-blue-400 hover:bg-blue-600">SignUp</button>
+            <br />
+        </form>
+    </>
 }
-
-export default Register;
-
