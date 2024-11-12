@@ -6,6 +6,8 @@ export default function Register(){
 
     // const queryClient = useQueryClient()
     const [newFormError,setNewFormError] = useState({})
+    const [isValidate,setIsValidate] = useState(false)
+    const [checkError,setCheckError] = useState([])
     const [confirmPassword,setConfirmPassword]= useState('')
     const [formData, setFormData] = useState({
         firstname:'',
@@ -54,7 +56,9 @@ export default function Register(){
             setConfirmPassword('')
         }
         setNewFormError(formError)
-        return {isValid:Object.keys(formError).length ===0, formError}
+        const isvalid = Object.keys(formError).length ===0
+        setIsValidate(isvalid)
+        return {isValid:isvalid, formError}
     }
 
     const handleChange=(e)=>{
@@ -75,12 +79,21 @@ export default function Register(){
         setFormData({...formData,[name]:value})
     }
     const postMutuation = useMutation({
-        mutationFn:(newUser)=> axios.post('http://localhost:3004/user/register',newUser),
+        mutationFn:(newUser)=> axios.post('http://localhost:3001/user/register',newUser),
         onSuccess:()=>{
             console.log('successfully submitted')
+            setFormData({firstname:'',
+                lastname:'',
+                country:'',
+                tel:'',
+                email:'',   
+                password:'',
+                role:'',})
+                setConfirmPassword('')
         },
         onError:(error)=>{
-            console.log('Error', error)
+            console.log('Error', error.response.data.error)
+            setCheckError(error.response.data.error)
         }
     })
     const handleSubmit= async(event)=>{
@@ -94,14 +107,7 @@ export default function Register(){
             console.log("This handleSubmit: ",formData)
             postMutuation.mutate(formData)
 
-            setFormData({firstname:'',
-                lastname:'',
-                country:'',
-                tel:'',
-                email:'',   
-                password:'',
-                role:'',})
-                setConfirmPassword('')
+
         }
     }
 
@@ -222,8 +228,10 @@ export default function Register(){
             <div className="pb-10 ">
                 {newFormError.confirmPassword && <p className="ml-[calc(30%)]  text-red-500">{newFormError.confirmPassword}</p>}
             </div>
+            {checkError && isValidate && <p className="text-red-500 ml-[calc(30%)]">** {checkError}</p>}
             <button type="submit" className="w-1/2 mx-auto flex justify-center  py-2 text-white rounded bg-blue-400 hover:bg-blue-600">SignUp</button>
             <br />
+            
             <p className="ml-[calc(50%)]">Already have an account? <Link to="/user/login" className="text-blue-600 underline">  Sign in</Link> </p>
         </form>
     </>
