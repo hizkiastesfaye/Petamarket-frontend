@@ -231,7 +231,6 @@ export default function Register(){
             {checkError && isValidate && <p className="text-red-500 ml-[calc(30%)]">** {checkError}</p>}
             <button type="submit" className="w-1/2 mx-auto flex justify-center  py-2 text-white rounded bg-blue-400 hover:bg-blue-600">SignUp</button>
             <br />
-            
             <p className="ml-[calc(50%)]">Already have an account? <Link to="/user/login" className="text-blue-600 underline">  Sign in</Link> </p>
         </form>
     </>
