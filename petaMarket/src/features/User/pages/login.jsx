@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import axios from 'axios'
+import { useMutation } from '@tanstack/react-query';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -7,6 +9,9 @@ function Login() {
   });
 
   const [errors, setErrors] = useState({});
+  const [token, setToken] = useState('')
+  const [firstname,setFristname] = useState('')
+  const [checkError,setCheckError] = useState([])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,13 +31,32 @@ function Login() {
     }
 
     setErrors(formErrors);
-    return Object.keys(formErrors).length === 0;
+    const isvalid = Object.keys(formErrors).length === 0
+    return {isValid: isvalid,formErrors}
   };
 
+  const postMutuation = useMutation({
+    mutationFn:(user)=> axios.post('http://localhost:3001/user/login',user),
+    onError: (error)=> {
+      console.log("Erorr is : ",error)
+      setCheckError(error.response.data.error)
+    },
+    onSuccess:(data)=>{
+      console.log("successfull: ",data.data)
+      setFristname(data.data.firstname)
+      setToken(data.data.token)
+    }
+  })
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    const {isValid,formErrors} = validateForm()
+    if (!isValid) {
+      console.log("formerrors is : ",formErrors)
+    }
+    else{
       console.log('Login successful:', formData);
+      postMutuation.mutate(formData)
+
       // Reset form
       setFormData({
         email: '',
@@ -73,6 +97,7 @@ function Login() {
       <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors">
         Login
       </button>
+     {checkError && <p>{checkError}</p>}
     </form>
   );
 }
