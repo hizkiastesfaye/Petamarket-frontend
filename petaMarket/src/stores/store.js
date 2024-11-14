@@ -1,6 +1,7 @@
-import {createStore} from 'redux'
+import {createStore, applyMiddleware} from 'redux'
 import {persistReducer,persistStore} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import { ExpireToken } from '../middleware/expirationTokenMiddleware'
 const persistConfig = {
     key:'root',
     storage
@@ -16,7 +17,7 @@ const reducer = (state=initState, action)=>{
     }
 }
 const persistreducerr = persistReducer(persistConfig,reducer)
-const store = createStore(persistreducerr)
+const store = createStore(persistreducerr,applyMiddleware(ExpireToken))
 const persistor=persistStore(store)
 export {store,persistor};
 
