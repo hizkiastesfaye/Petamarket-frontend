@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-
+import {useSelector,useDispatch} from 'react-redux'
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -9,9 +10,12 @@ function Login() {
   });
 
   const [errors, setErrors] = useState({});
-  const [token, setToken] = useState('')
+  // const [token, setToken] = useState('')
   const [firstname,setFristname] = useState('')
   const [checkError,setCheckError] = useState([])
+  const token = useSelector((state)=>state.token)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +40,7 @@ function Login() {
   };
 
   const postMutuation = useMutation({
-    mutationFn:(user)=> axios.post('http://localhost:3001/user/login',user),
+    mutationFn:(user)=> axios.post('http://localhost:3004/user/login',user),
     onError: (error)=> {
       console.log("Erorr is : ",error)
       setCheckError(error.response.data.error)
@@ -44,7 +48,9 @@ function Login() {
     onSuccess:(data)=>{
       console.log("successfull: ",data.data)
       setFristname(data.data.firstname)
-      setToken(data.data.token)
+      // setToken(data.data.token)
+      dispatch({type:'SET_TOKEN',payload:data.data.token})
+      navigate('/')
     }
   })
   const handleSubmit = (e) => {

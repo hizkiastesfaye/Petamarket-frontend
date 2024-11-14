@@ -79,7 +79,7 @@ export default function Register(){
         setFormData({...formData,[name]:value})
     }
     const postMutuation = useMutation({
-        mutationFn:(newUser)=> axios.post('http://localhost:3001/user/register',newUser),
+        mutationFn:(newUser)=> axios.post('http://localhost:3004/user/register',newUser),
         onSuccess:()=>{
             console.log('successfully submitted')
             setFormData({firstname:'',
