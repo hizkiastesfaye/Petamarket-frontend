@@ -5,6 +5,7 @@ const persistConfig = {
     key:'root',
     storage
 }
+
 const initState = {
     token:null
 }
