@@ -4,6 +4,7 @@ import Register from './features/User/pages/register'
 import Login from './features/User/pages/login'
 import Dashboard from './features/Dashboard/pages/dashboard'
 import Header from './common/header'
+import PostProduct from './features/Seller/pages/postProduct'
 function App() {
 
   return (
@@ -16,6 +17,9 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path='login' element={<Login />} />
       </Route>
+      <Route path='seller' >
+            <Route path='post' element={<PostProduct />} />
+        </Route>
     </Routes>
   )
 }

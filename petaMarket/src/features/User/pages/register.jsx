@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import {useMutation, useQueryClient} from "@tanstack/react-query"
+import {useMutation} from "@tanstack/react-query"
 import axios from 'axios'
 export default function Register(){
 
@@ -125,7 +125,7 @@ export default function Register(){
                         placeholder="Your first name"
                         value={formData.firstname}
                         onChange={handleChange}
-                        className=" w-2/3 px-4 py-1 border rounded focus:outline-none focus:border-blue-500 mr"
+                        className=" w-2/3 px-4 py-1 border rounded focus:outline-none focus:border-blue-500"
                     />
                     <input
                         type="text" 

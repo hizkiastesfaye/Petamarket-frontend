@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware} from 'redux'
+import {createStore} from 'redux'
 import {persistReducer,persistStore} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 const persistConfig = {
@@ -7,12 +7,13 @@ const persistConfig = {
 }
 
 const initState = {
-    token:null
+    token:null,
+    firstname:''
 }
 const reducer = (state=initState, action)=>{
     switch(action.type){
-        case 'SET_TOKEN': return {...state,token:action.payload};
-        case 'LOGOUT': return {...state,token:null}
+        case 'SET_TOKEN': return {...state,token:action.payload.token, firstname:action.payload.firstname};
+        case 'LOGOUT': return {...state,token:null, firstname:''}
         default: return state
     }
 }

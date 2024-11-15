@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import {useSelector,useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux'
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
@@ -11,9 +11,8 @@ function Login() {
 
   const [errors, setErrors] = useState({});
   // const [token, setToken] = useState('')
-  const [firstname,setFristname] = useState('')
+  // const [firstname,setFristname] = useState('')
   const [checkError,setCheckError] = useState([])
-  const token = useSelector((state)=>state.token)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -47,9 +46,13 @@ function Login() {
     },
     onSuccess:(data)=>{
       console.log("successfull: ",data.data)
-      setFristname(data.data.firstname)
+      // setFristname(data.data.firstname)
       // setToken(data.data.token)
-      dispatch({type:'SET_TOKEN',payload:data.data.token})
+      const payload = {
+        token:data.data.token,
+        firstname:data.data.firstname
+      }
+      dispatch({type:'SET_TOKEN',payload})
       navigate('/')
     }
   })
