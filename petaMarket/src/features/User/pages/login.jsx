@@ -10,8 +10,6 @@ function Login() {
   });
 
   const [errors, setErrors] = useState({});
-  // const [token, setToken] = useState('')
-  // const [firstname,setFristname] = useState('')
   const [checkError,setCheckError] = useState([])
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -46,14 +44,13 @@ function Login() {
     },
     onSuccess:(data)=>{
       console.log("successfull: ",data.data)
-      // setFristname(data.data.firstname)
-      // setToken(data.data.token)
       const payload = {
         token:data.data.token,
-        firstname:data.data.firstname
+        firstname:data.data.firstname,
+        role:data.data.role
       }
       dispatch({type:'SET_TOKEN',payload})
-      navigate('/')
+      navigate('/home')
     }
   })
   const handleSubmit = (e) => {
