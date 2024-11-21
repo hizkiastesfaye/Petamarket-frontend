@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {useMutation} from "@tanstack/react-query"
 import axios from 'axios'
 export default function Register(){
 
+    const navigate = useNavigate()
     // const queryClient = useQueryClient()
     const [newFormError,setNewFormError] = useState({})
     const [isValidate,setIsValidate] = useState(false)
@@ -90,6 +91,7 @@ export default function Register(){
                 password:'',
                 role:'',})
                 setConfirmPassword('')
+                navigate('/user/login')
         },
         onError:(error)=>{
             console.log('Error', error.response.data.error)
@@ -106,6 +108,7 @@ export default function Register(){
         else {
             console.log("This handleSubmit: ",formData)
             postMutuation.mutate(formData)
+
 
 
         }

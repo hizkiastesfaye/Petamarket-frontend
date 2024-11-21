@@ -3,11 +3,11 @@ import axios from "axios"
 import {useState } from "react"
 import { useSelector } from "react-redux"
 
-export default function AddProduct(){
+export default function AddProduct({token}){
     const [isButtonDisabled,setIsButtonDisabled] = useState(false)
     const firstname = useSelector((state)=>state.firstname)
     const role = useSelector((state)=>state.role)
-    const token = useSelector((state)=>state.token)
+    // const token = useSelector((state)=>state.token)
     const [productInput,setProductInput] = useState({
         name:'',
         catagory:'',
@@ -55,7 +55,6 @@ export default function AddProduct(){
         console.log('The error is: ', formErrors)
         setFormError(formErrors)
         return {isvalid:Object.keys(formError).length === 0, formErrors}
-        
     }
     const postProductMut = useMutation({
         mutationFn:(newProduct)=> axios.post('http://localhost:3004/product/add',newProduct,{
@@ -87,7 +86,6 @@ export default function AddProduct(){
             postProductMut.mutate(productInput)
             postInventoryMut.mutate(invInput)
             setIsButtonDisabled(true)
-
         }
     }
     return <>
