@@ -14,7 +14,8 @@ export default function AddInventory({index}){
         invSku:'',
         invStockLevel:'',
         price:'',
-        location:''
+        location:'',
+        image:null,
     })
     const [formError,setFormError] = useState({})
     const [isButtonDisabled,setIsButtonDisabled] = useState(false)
@@ -24,6 +25,11 @@ export default function AddInventory({index}){
         const {name,value}=e.target
         console.log('handle inventory value: ',name,value)
         setInvInput({...invInput,[name]:value})
+    }
+
+    const handleFileChange=(e)=>{
+        const image1= e.target.files[0]
+        setInvInput({...invInput,image: image1})
     }
 
     const validatePostForm =()=>{
@@ -42,7 +48,7 @@ export default function AddInventory({index}){
         mutationFn:(newInv)=> axios.post('http://localhost:3004/inventory/add',newInv,{
             headers:{
                 Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         }),
         onError:(error)=> console.log('The post product Error: ',error),
@@ -54,11 +60,16 @@ export default function AddInventory({index}){
             console.log('The Error is: ',formErrors)
         }
         else{
+            const formData = new FormData();
+            for (const key in invInput){
+                formData.append(key,invInput[key])
+            }
             console.log('First name is: ',firstname,role,token)
-            postInventoryMut.mutate(invInput)
+            postInventoryMut.mutate(formData)
             setIsButtonDisabled(true)
         }
     }
+
     return <>
         <form className="mx-auto rounded-2xl my-20 border-2 w-[calc(96%)] bg-gray-50 p-5">
             <hr className="w-[calc(90%)] mx-auto my-10" />
@@ -141,6 +152,9 @@ export default function AddInventory({index}){
                         <div className="mx-auto w-fit text-sm text-red-500">
                             {formError.location && <p>** {formError.location}</p>}
                         </div>
+                    </div>
+                    <div>
+                        <input type="file" onChange={handleFileChange} />
                     </div>
                 </div>
                 <div className="mt-10 flex justify-end mr-10">
