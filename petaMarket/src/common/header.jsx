@@ -10,8 +10,11 @@ import user from "../images/icons/user.png"
 import message from "../images/icons/message.png"
 import search from "../images/icons/search.png"
 import menu from "../images/icons/menu.png"
-import Notification from './components/notification'
+import down from "../images/icons/down.png"
+import Notification from './components/notificHeader'
 import { useState } from 'react'
+import UserHeader from './components/userHeader'
+import All from './components/All'
 
 export default function Header(){
     const dispatch = useDispatch()
@@ -25,7 +28,9 @@ export default function Header(){
         setIsNotfiOpen(status);
     }
     return<>
-        <div className="shadow-md border-solid pb-2 md:px-6 px-1" onBlur={()=>NotfiToggleHandle(false)}>
+        <div className="shadow-md border-solid pb-2 md:px-6 px-1" onBlur={(e)=>{
+            if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
+            NotfiToggleHandle(false)}}>
             <div className='md:mx-5 flex justify-between mt-5'>
                 <div className='flex justify-around gap-3'>
                     <div className='block md:hidden h-7'>
@@ -42,37 +47,52 @@ export default function Header(){
                     <img src={menu} alt="Menu icon" className='h-6 w-6' />
                 </div>
                 <div className='md:w-3/5 md:flex md:justify-end md:gap-[calc(10%)] md:pr-6 hidden'>
-                    <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
-                        <button onFocus={(e)=>{
-                            if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
-                            NotfiToggleHandle(true)}}>
+                    <div className=' hover:bg-gray-100 hover:cursor-pointer hover:rounded-lg relative group'>
+                        <button >
                         <img src={notification} alt="notification" className="w-6 mx-5" />
-                        <h1>Notification</h1>
+                        <div className='flex justify-around'>
+                            <h1>Notification</h1>
+                            <img src={down} alt='down' className='w-4 h-4 mt-1'/>
+                        </div>
                         </button>
-                        {isNotfiOpen && <Notification />}
+                        <div className='hidden group-hover:block '>
+                        <Notification />
+                        </div>
                     </div>
-                    <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
+                    {/* <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
                         <img src={message} alt="message" className="w-6 mx-4" />
                         <h1>Message</h1>
-                    </div>
-                    <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
+                    </div> */}
+                    <div className='hover:text-blue-600 hover:shadow-xl hover:cursor-pointer hover:rounded-lg'>
                         <img src={order} alt="order" className="w-6 mx-2" />
                         <h1>Order</h1>
                     </div>
-                    <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
+                    <div className='hover:text-blue-600 hover:shadow-xl hover:cursor-pointer hover:rounded-lg'>
                         <img src={cart} alt="cart" className="w-6" />
                         <h1>Carts</h1>
                     </div>
-                    <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
-                        <img src={user} alt="firstname" className="w-6" />
-                        <h1>User</h1>
+                    <div className=' group hover:shadow-xl hover:cursor-pointer hover:rounded-lg'>
+                        <div className='hover:text-blue-600'>
+                            <img src={user} alt="firstname" className="w-6" />
+                            <div className='flex justify-around'>
+                                <h1>User</h1>
+                                <img src={down} alt='down' className='w-4 h-4 mt-1'/>
+                            </div>
+                        </div>
+                        <div className='hidden group-hover:block'>
+                            <UserHeader />
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <div className='mx-5 flex justify-between my-3'>
-                <div className='md:flex md:justify-around hidden'>
-                    <img src={all} alt="cart" className="h-10 w-10" />
-                    <h1 className='text-2xl font-bold'>All</h1>
+            <div className='ml-1 mr-5 flex justify-between my-3'>
+                <div className='md:flex md:justify-around hidden group'>
+                    <img src={all} alt="cart" className="h-8 w-8" />
+                    <button className='text-2xl font-bold'>All</button>
+                    <div className='group-hover:block hidden'>
+                    <All />
+                    </div>
                 </div>
                 <div className='flex border-2 border-gray-500 rounded-3xl md:w-3/4 mr-[calc(2%)] gap-3 justify-between'>
                     <div className='border-r-2 w-2/3'>
@@ -92,7 +112,7 @@ export default function Header(){
             </div>
 
         </div>
-        <button onClick={handleLogout}>Logout</button>
+
         <br />
         <br />
     </>
