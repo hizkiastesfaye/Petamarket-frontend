@@ -11,6 +11,7 @@ import message from "../images/icons/message.png"
 import search from "../images/icons/search.png"
 import menu from "../images/icons/menu.png"
 import down from "../images/icons/down.png"
+import close from "../images/icons/close.png"
 import Notification from './components/notificHeader'
 import { useState } from 'react'
 import UserHeader from './components/userHeader'
@@ -19,6 +20,7 @@ import All from './components/All'
 export default function Header(){
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [isAll,setIsAll]=useState(false)
     const handleLogout=()=>{
         dispatch({type:'LOGOUT'})
         navigate('/user/login')
@@ -27,10 +29,25 @@ export default function Header(){
     const NotfiToggleHandle = (status)=>{
         setIsNotfiOpen(status);
     }
+    const handleAll=()=>{
+        setIsAll(!isAll)
+        if(!isAll){
+        document.body.style.opacity='30%'
+        document.body.style.backgroundColor='black'
+        document.body.style.inset=0
+        }
+        else{
+        document.body.style.opacity='100%'
+        document.body.style.backgroundColor='white'
+
+        }
+    }
     return<>
-        <div className="shadow-md border-solid pb-2 md:px-6 px-1" onBlur={(e)=>{
-            if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
-            NotfiToggleHandle(false)}}>
+        <div className="shadow-md border-solid pb-2 md:px-6 px-1" onClick={()=>{
+                if(isAll === true){
+                    setIsAll(false)
+                }
+            }}>
             <div className='md:mx-5 flex justify-between mt-5'>
                 <div className='flex justify-around gap-3'>
                     <div className='block md:hidden h-7'>
@@ -47,16 +64,16 @@ export default function Header(){
                     <img src={menu} alt="Menu icon" className='h-6 w-6' />
                 </div>
                 <div className='md:w-3/5 md:flex md:justify-end md:gap-[calc(10%)] md:pr-6 hidden'>
-                    <div className=' hover:bg-gray-100 hover:cursor-pointer hover:rounded-lg relative group'>
+                    <div className='hover:bg-gray-100 hover:cursor-pointer hover:rounded-lg relative group'>
                         <button >
-                        <img src={notification} alt="notification" className="w-6 mx-5" />
-                        <div className='flex justify-around'>
-                            <h1>Notification</h1>
-                            <img src={down} alt='down' className='w-4 h-4 mt-1'/>
-                        </div>
+                            <img src={notification} alt="notification" className="w-6 mx-5" />
+                            <div className='flex justify-around'>
+                                <h1>Notification</h1>
+                                <img src={down} alt='down' className='w-4 h-4 mt-1'/>
+                            </div>
                         </button>
                         <div className='hidden group-hover:block '>
-                        <Notification />
+                            <Notification />
                         </div>
                     </div>
                     {/* <div className='hover:bg-[#C1DCFF] hover:cursor-pointer hover:rounded-lg'>
@@ -88,11 +105,11 @@ export default function Header(){
             </div>
             <div className='ml-1 mr-5 flex justify-between my-3'>
                 <div className='md:flex md:justify-around hidden group'>
-                    <img src={all} alt="cart" className="h-8 w-8" />
-                    <button className='text-2xl font-bold'>All</button>
-                    <div className='group-hover:block hidden'>
-                    <All />
-                    </div>
+                    <button className='text-2xl font-bold' onClick={handleAll}>
+                        <img src={all} alt="cart" className="h-8 w-8" />
+                        <p>All</p>
+                    </button>
+
                 </div>
                 <div className='flex border-2 border-gray-500 rounded-3xl md:w-3/4 mr-[calc(2%)] gap-3 justify-between'>
                     <div className='border-r-2 w-2/3'>
@@ -112,7 +129,15 @@ export default function Header(){
             </div>
 
         </div>
-
+        {isAll && <div className="absolute left-0 top-2 w-[calc(30%)] flex justify-around">
+            <div className='w-[calc(94%)] bg-slate-100'>
+                <All/>
+            </div>
+            <div  className='h-8 w-8 '>
+                <img src={close} alt='close' onClick={handleAll} className='w-6 h-6 hover:w-8 hover:h-8 hover:shadow-gray-500 hover:shadow-lg'/>
+            </div>
+            
+        </div>}
         <br />
         <br />
     </>
